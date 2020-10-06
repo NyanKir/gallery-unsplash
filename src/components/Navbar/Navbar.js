@@ -1,11 +1,30 @@
 import React from "react";
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
+import styled from "styled-components";
 
-export const Navbar=()=>{
-    return(
-        <div>
-            <Link to="/">Home</Link>
-            <Link to="/picture">Picture</Link>
-        </div>
+const Header = styled.header`
+    width:100%;
+    background:#525050;
+    padding: 20px 0;
+    display:flex;
+    justify-content:center;
+`;
+
+const StyledLink = styled(NavLink)`
+    margin:0 10px;
+    color:white;
+    
+    &.active {
+        text-decoration: none;
+    }
+`;
+
+
+export const Navbar = () => {
+    return (
+        <Header>
+            <StyledLink to="/" exact>Home</StyledLink>
+            {/*<StyledLink to="/picture" exact>Picture</StyledLink>*/}
+        </Header>
     )
 }

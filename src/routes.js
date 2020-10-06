@@ -1,7 +1,7 @@
 import React from "react"
 import {Switch, Route, Redirect} from "react-router-dom"
-import {HomePage} from "./pages/HomePage";
-import {PicturePage} from "./pages/PicturePage";
+import {HomePage} from "./pages/HomePage"
+import {PicturePage} from "./pages/PicturePage"
 
 export const useRoutes = () => {
     return (
