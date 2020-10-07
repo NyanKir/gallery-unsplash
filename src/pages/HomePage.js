@@ -8,6 +8,7 @@ export const HomePage = () => {
     const [pagePictures,setPage]=useState(2)
     const dispatch = useDispatch()
     const data = useSelector((state) => state.galleryReducer.fetchedData.data)
+    const nowSearch = useSelector((state) => state.galleryReducer.nowSearch)
     const scrollPosition=useScrollHandler()
 
 
@@ -17,8 +18,8 @@ export const HomePage = () => {
 
 
     useEffect(()=>{
-        if(scrollPosition>85){
-            loadMoreFetchData(dispatch,pagePictures)()
+        if(scrollPosition>55){
+            loadMoreFetchData(dispatch,pagePictures,nowSearch)()
             setPage(pagePictures+1)
         }
     },[dispatch,scrollPosition])

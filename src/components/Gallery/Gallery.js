@@ -9,9 +9,12 @@ const GalleryGrid=styled.section`
     justify-content:center;
 `
 const LineOrientation=styled.div`
-    margin: 3px;
+    margin: 2.5px;
     display:flex;
     flex-direction:column;
+    picture{
+        margin: 5px;
+    }
 `
 
 export const Line=(props)=>{
@@ -40,6 +43,9 @@ export const Gallery=(props)=>{
     }
     if (status === 'failed') {
         return <Error error={'Попробуйте подключить VPN, либо это проблема Unsplash'}/>
+    }
+    if (props.data[0].length===0){
+        return <Error error={'Ничего не найдено'}/>
     }
 
     const pictures=props.data.map((el,index)=>{

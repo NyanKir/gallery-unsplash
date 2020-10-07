@@ -1,24 +1,28 @@
-import {FETCH_DATA_SUCCESS, FETCH_DATA_STATUS, FETCH_LOAD_DATA_SUCCESS} from "../types";
+import {types} from "../types";
 
 const initialState = {
     fetchedData: {
         data: [],
         status: 'idle',
-    }
+    },
+    history:[],
+    nowSearch:''
 }
 
 export const galleryReducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case FETCH_DATA_SUCCESS:
+        case types.FETCH_DATA_SUCCESS:
             return {
                 ...state,
                 fetchedData: {
                     ...state.fetchedData,
                     data: [...action.payload]
-                }
+                },
+                history: action.source?[...state.history,{[new Date().toLocaleString()]:action.source}]:[...state.history],
+                nowSearch: action.source?action.source:state.nowSearch
             }
-        case FETCH_LOAD_DATA_SUCCESS:
+        case types.FETCH_LOAD_DATA_SUCCESS:
             return {
                 ...state,
                 fetchedData: {
@@ -31,14 +35,13 @@ export const galleryReducer = (state = initialState, action) => {
                     },state.fetchedData.data)
                 }
             }
-        case FETCH_DATA_STATUS:
+        case types.FETCH_DATA_STATUS:
             return {
                 ...state,
                 fetchedData: {
                     ...state.fetchedData,
                     status: action.status
                 }}
-
         default:
             return state
     }

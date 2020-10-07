@@ -1,26 +1,42 @@
-import {FETCH_DATA_STATUS, FETCH_DATA_SUCCESS, FETCH_LOAD_DATA_SUCCESS} from "./types";
+import {types} from "./types";
 
 
-export const fetchDataSuccess = (data) => {
+export const fetchDataSuccess = (data,text) => {
     return {
-        type: FETCH_DATA_SUCCESS,
-        payload: data
+        type: types.FETCH_DATA_SUCCESS,
+        payload: data,
+        source:text?text:''
     }
 }
 
 export const fetchDataStatus = (status) => {
     return {
-        type: FETCH_DATA_STATUS,
+        type: types.FETCH_DATA_STATUS,
         status: status
     }
 }
 export const fetchLoadDataStatus = (data) => {
     return {
-        type: FETCH_LOAD_DATA_SUCCESS,
+        type: types.FETCH_LOAD_DATA_SUCCESS,
         payload: data
     }
 }
 
+
+
+export function SourceData(dispatch,text){
+    dispatch(fetchDataStatus('loading'))
+    return async () => {
+        try {
+            const res = await fetch(`https://api.unsplash.com/search/photos/?page=1&query=${text}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
+            const data = await res.json()
+            dispatch(fetchDataSuccess(data.results,text))
+            dispatch(fetchDataStatus('succeeded'))
+        } catch (e) {
+            dispatch(fetchDataStatus('failed'))
+        }
+    }
+}
 
 export function loadFetchData(dispatch) {
     dispatch(fetchDataStatus('loading'))
@@ -33,15 +49,24 @@ export function loadFetchData(dispatch) {
         } catch (e) {
             dispatch(fetchDataStatus('failed'))
         }
-
-
     }
 }
 
-export function loadMoreFetchData(dispatch, count) {
+export function loadMoreFetchData(dispatch,count,search) {
     return async () => {
-        const res = await fetch(`https://api.unsplash.com/photos/?page=${count}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
+        let res;
+        if(search){
+            res = await fetch(`https://api.unsplash.com/search/photos/?page=${count}&query=${search}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
+        }else{
+             res = await fetch(`https://api.unsplash.com/photos/?page=${count}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
+        }
         const data = await res.json()
-        dispatch(fetchLoadDataStatus(data))
+        if(data.results){
+            dispatch(fetchLoadDataStatus(data.results))
+
+        }else{
+            dispatch(fetchLoadDataStatus(data))
+
+        }
     }
 }
