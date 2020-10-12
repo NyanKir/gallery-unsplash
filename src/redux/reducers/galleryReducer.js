@@ -5,7 +5,6 @@ const initialState = {
         data: [],
         status: 'idle',
     },
-    history:[],
     nowSearch:''
 }
 
@@ -19,7 +18,6 @@ export const galleryReducer = (state = initialState, action) => {
                     ...state.fetchedData,
                     data: [...action.payload]
                 },
-                history: action.source?[...state.history,{[new Date().toLocaleString()]:action.source}]:[...state.history],
                 nowSearch: action.source?action.source:state.nowSearch
             }
         case types.FETCH_LOAD_DATA_SUCCESS:

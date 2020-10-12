@@ -1,11 +1,10 @@
 import {types} from "./types";
 
 
-export const fetchDataSuccess = (data,text) => {
+export const fetchDataSuccess = (data) => {
     return {
         type: types.FETCH_DATA_SUCCESS,
         payload: data,
-        source:text?text:''
     }
 }
 
@@ -30,7 +29,7 @@ export function SourceData(dispatch,text){
         try {
             const res = await fetch(`https://api.unsplash.com/search/photos/?page=1&query=${text}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
             const data = await res.json()
-            dispatch(fetchDataSuccess(data.results,text))
+            dispatch(fetchDataSuccess(data.results))
             dispatch(fetchDataStatus('succeeded'))
         } catch (e) {
             dispatch(fetchDataStatus('failed'))
@@ -54,19 +53,25 @@ export function loadFetchData(dispatch) {
 
 export function loadMoreFetchData(dispatch,count,search) {
     return async () => {
-        let res;
-        if(search){
-            res = await fetch(`https://api.unsplash.com/search/photos/?page=${count}&query=${search}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
-        }else{
-             res = await fetch(`https://api.unsplash.com/photos/?page=${count}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
-        }
-        const data = await res.json()
-        if(data.results){
-            dispatch(fetchLoadDataStatus(data.results))
+        try{
+            let res;
+            if(search){
+                res = await fetch(`https://api.unsplash.com/search/photos/?page=${count}&query=${search}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
+            }else{
+                res = await fetch(`https://api.unsplash.com/photos/?page=${count}&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU`)
+            }
+            const data = await res.json()
+            if(data.results){
+                dispatch(fetchLoadDataStatus(data.results))
 
-        }else{
-            dispatch(fetchLoadDataStatus(data))
+            }else{
+                dispatch(fetchLoadDataStatus(data))
 
+            }
+        }catch(e){
+            dispatch(fetchDataStatus('failed'))
+            console.log(e)
         }
+
     }
 }

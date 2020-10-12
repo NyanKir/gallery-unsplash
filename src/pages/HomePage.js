@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react"
 import {useDispatch, useSelector} from "react-redux";
-import {loadFetchData, loadMoreFetchData} from "../redux/actions";
+import {loadFetchData, loadMoreFetchData, SourceData} from "../redux/actions";
 import {Gallery} from "../components/Gallery/Gallery";
 import {useScrollHandler} from "../hooks/scroll.hook";
+import {useParams} from "react-router-dom";
 
 export const HomePage = () => {
     const [pagePictures,setPage]=useState(2)
@@ -10,11 +11,14 @@ export const HomePage = () => {
     const data = useSelector((state) => state.galleryReducer.fetchedData.data)
     const nowSearch = useSelector((state) => state.galleryReducer.nowSearch)
     const scrollPosition=useScrollHandler()
-
-
+    const {text} = useParams()
     useEffect(() => {
-        loadFetchData(dispatch)()
-    }, [])
+        if(text){
+            SourceData(dispatch, text)()
+        }else{
+            loadFetchData(dispatch)()
+        }
+    }, [text])
 
 
     useEffect(()=>{

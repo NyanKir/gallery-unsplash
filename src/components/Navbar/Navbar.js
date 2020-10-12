@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import {NavLink} from 'react-router-dom'
+import {Redirect,NavLink} from 'react-router-dom'
 import styled from "styled-components";
-import {SourceData} from "../../redux/actions";
-import {useDispatch} from "react-redux";
+import {useLocalStorage} from "../../hooks/storage_history.hook";
 
 const Header = styled.header`
     width:100%;
@@ -23,7 +22,7 @@ const StyledLink = styled(NavLink)`
 const FormIndent = styled.form`
     margin-left:auto;
     .input{
-        box-shadow:${props => props.currect ? 'none':'0 0 5px red'};
+        box-shadow:${props => props.currect ? 'none' : '0 0 5px red'};
         margin:0 5px;
     }
     .button{
@@ -34,15 +33,23 @@ const FormIndent = styled.form`
 
 export const Navbar = () => {
     const [source, setSource] = useState("");
-    const [currect, setCurrect] = useState(true);
-    const dispatch = useDispatch()
+    const [submitted, setSubmitted] = useState(false);
+    const [currency, setCurrency] = useState(true);
+    const [setValue] = useLocalStorage('history', [])
 
     const handlerSubmit = (evt) => {
-        if (source.trim() || source.trim()!=='') {
-            setCurrect(true)
-            SourceData(dispatch, source)()
-        }else{
-            setCurrect(false)
+        if (source.trim() || source.trim() !== '') {
+            const item = JSON.parse(window.localStorage.getItem('history'));
+            const actionSource = {
+                id: (item[0]) ? item[item.length - 1].id + 1 : 1,
+                text: source,
+                date: new Date().toLocaleString()
+            }
+            setCurrency(true)
+            setValue(actionSource)
+            setSubmitted(true)
+        } else {
+            setCurrency(false)
         }
         evt.preventDefault()
     }
@@ -50,12 +57,13 @@ export const Navbar = () => {
     return (
         <Header>
             <StyledLink to="/" exact>Home</StyledLink>
-            <StyledLink to="/" exact>History</StyledLink>
-            {/*<StyledLink to="/picture" exact>Picture</StyledLink>*/}
-            <FormIndent onSubmit={handlerSubmit} currect={currect}>
-                <input type="text" className='input' onChange={e => setSource(e.target.value)} />
+            <StyledLink to="/history" exact>History</StyledLink>
+            <StyledLink to="/follows" exact>Follows</StyledLink>
+            <FormIndent onSubmit={handlerSubmit} currect={currency}>
+                <input type="text" className='input' onChange={e => setSource(e.target.value)} placeholder="Что ищем?"/>
                 <button className='button' type="submit">Search</button>
             </FormIndent>
+            {submitted && <Redirect to={{pathname: '/source/'+source,}}/>}
         </Header>
     )
 }
