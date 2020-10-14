@@ -3,6 +3,7 @@ import {Switch, Route, Redirect} from "react-router-dom"
 import {HomePage} from "./pages/HomePage"
 import {HistoryPage} from "./pages/HistoryPage"
 import {FollowsPage} from "./pages/FollowsPage";
+import {PiturePage} from "./pages/PicturePage";
 
 export const useRoutes = () => {
     return (
@@ -18,6 +19,9 @@ export const useRoutes = () => {
             </Route>
             <Route path="/follows">
                 <FollowsPage/>
+            </Route>
+            <Route path="/picture/:id">
+                <PiturePage/>
             </Route>
             <Redirect to="/"/>
         </Switch>

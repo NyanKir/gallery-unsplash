@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {Redirect,NavLink} from 'react-router-dom'
+import {Redirect, NavLink} from 'react-router-dom'
 import styled from "styled-components";
-import {useLocalStorage} from "../../hooks/storage_history.hook";
+import {useLocalStorage} from "../../hooks/localstorage.hook";
 
 const Header = styled.header`
     width:100%;
@@ -33,21 +33,22 @@ const FormIndent = styled.form`
 
 export const Navbar = () => {
     const [source, setSource] = useState("");
-    const [submitted, setSubmitted] = useState(false);
     const [currency, setCurrency] = useState(true);
     const [setValue] = useLocalStorage('history', [])
 
     const handlerSubmit = (evt) => {
         if (source.trim() || source.trim() !== '') {
             const item = JSON.parse(window.localStorage.getItem('history'));
-            const actionSource = {
-                id: (item[0]) ? item[item.length - 1].id + 1 : 1,
-                text: source,
-                date: new Date().toLocaleString()
-            }
             setCurrency(true)
-            setValue(actionSource)
-            setSubmitted(true)
+
+            setValue([...JSON.parse(window.localStorage.getItem('history')),
+                {
+                    id: (item[0]) ? item[item.length - 1].id + 1 : 1,
+                    text: source,
+                    date: new Date().toLocaleString()
+                }
+            ])
+            alert('Добавлено')
         } else {
             setCurrency(false)
         }
@@ -61,9 +62,9 @@ export const Navbar = () => {
             <StyledLink to="/follows" exact>Follows</StyledLink>
             <FormIndent onSubmit={handlerSubmit} currect={currency}>
                 <input type="text" className='input' onChange={e => setSource(e.target.value)} placeholder="Что ищем?"/>
-                <button className='button' type="submit">Search</button>
+                <button className='button' type="submit">Save</button>
             </FormIndent>
-            {submitted && <Redirect to={{pathname: '/source/'+source,}}/>}
+            <Redirect to={{pathname: '/source/' + source,}}/>
         </Header>
     )
 }

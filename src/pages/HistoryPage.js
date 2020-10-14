@@ -1,9 +1,7 @@
 import React, {useState} from "react"
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {SourceData} from "../redux/actions";
-import {Error} from "../components/Error";
+
 
 const HistoryWrapper = styled.section`
     display:flex;
@@ -56,7 +54,6 @@ export const HistoryPage = () => {
         return JSON.parse(window.localStorage.getItem('history'))
     })
 
-    const dispatch = useDispatch()
 
     const removeHistory = (id) => {
         const sorted=history.filter((el)=> el.id!==id)
@@ -72,8 +69,7 @@ export const HistoryPage = () => {
                 <div className="info">
 
                     <span className="info_name">
-                        <NavLink to="/"
-                                 onClick={() => SourceData(dispatch, el.text)()}>{el.text}</NavLink>
+                        <NavLink to={'/source/'+el.text}>{el.text}</NavLink>
                     </span>
                     <span className="info_time">
                         Time: {el.date}

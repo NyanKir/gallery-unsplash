@@ -41,7 +41,7 @@ export function loadFetchData(dispatch) {
     dispatch(fetchDataStatus('loading'))
     return async () => {
         try {
-            const res = await fetch('https://api.unsplash.com/photos/?page=1&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU')
+                const res = await fetch('https://api.unsplash.com/photos/?page=1&client_id=4kKJyVOE_v-8VRUmQCyz6t7dsTjwlraJYiHPAjBAVnU')
             const data = await res.json()
             dispatch(fetchDataSuccess(data))
             dispatch(fetchDataStatus('succeeded'))
