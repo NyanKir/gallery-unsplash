@@ -15,9 +15,7 @@ const LineOrientation = styled.div`
     margin: 2.5px;
     display:flex;
     flex-direction:column;
-    
-
-    
+        
     .wrapper{
         overflow:hidden;
         position:relative;
