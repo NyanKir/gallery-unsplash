@@ -1,5 +1,5 @@
 #Галерея (API Unsplash)
-Demo-https://www.google.com
+Demo - https://nyankir.github.io/gallery-unsplash/
 
 ##Используемые технологий
 1. Redux
