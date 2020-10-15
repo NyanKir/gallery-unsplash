@@ -1,6 +1,7 @@
 import React, {useState} from "react"
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
+import {Error} from "../components/Error";
 
 
 const HistoryWrapper = styled.section`
@@ -60,7 +61,9 @@ export const HistoryPage = () => {
         window.localStorage.setItem('history',JSON.stringify(sorted))
         setHistory(sorted)
     }
-
+    if(!history.length){
+        return <Error error="Ничего нету"/>
+    }
 
     const list = history.map((el,index) => {
         return (
