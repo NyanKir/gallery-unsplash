@@ -61,7 +61,7 @@ export const Line = (props) => {
                        isred={props.follows.includes(el.id)}>
                     &#10084;
                 </Heart>
-                <NavLink to={'picture/'+el.id}>
+                <NavLink to={'/picture/'+el.id}>
                     <picture className="picture">
                         <img src={el.urls.small} alt={el.alt_description}/>
                     </picture>
